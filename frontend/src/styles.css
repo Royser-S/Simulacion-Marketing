@@ -1,0 +1,62 @@
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import "bootstrap-icons/font/bootstrap-icons.css";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --ciber-blue: #002855;
+  --ciber-accent: #0056b3;
+  --ciber-light: #f4f7fa;
+  --ciber-red: #d32f2f;
+  --text-dark: #1e1e2d;
+  --card-shadow: 0 10px 30px rgba(0, 40, 85, 0.08);
+}
+
+body {
+  background-color: var(--ciber-light);
+  font-family: 'Inter', sans-serif;
+  color: var(--text-dark);
+}
+
+.premium-card {
+  border: none;
+  border-radius: 20px;
+  box-shadow: var(--card-shadow);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: #ffffff;
+}
+
+.premium-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(0, 40, 85, 0.15);
+}
+
+.btn-primary {
+  background: var(--ciber-blue);
+  border: none;
+  padding: 12px 30px;
+  font-weight: 600;
+  border-radius: 12px;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: var(--ciber-accent);
+  box-shadow: 0 5px 15px rgba(0, 40, 85, 0.3);
+}
+
+.navbar-brand {
+  font-weight: 800;
+  color: var(--ciber-blue) !important;
+  letter-spacing: -0.5px;
+}
+
+/* Glassmorphism utility */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.text-ciber-blue { color: var(--ciber-blue); }
+.bg-ciber-blue { background-color: var(--ciber-blue); }
