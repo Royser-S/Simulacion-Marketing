@@ -1,0 +1,104 @@
+<div class="dashboard-layout min-vh-100 bg-light">
+  
+  <!-- Top Bar Institucional -->
+  <nav class="navbar navbar-light bg-white border-bottom py-3 px-4 shadow-sm sticky-top">
+    <div class="container d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center gap-3">
+        <img src="assets/cibertec-logo.png" alt="Cibertec Logo" style="height: 35px;">
+        <span class="h5 mb-0 fw-bold text-ciber-blue border-start ps-3 d-none d-md-inline">CiberMarketing Lab</span>
+      </div>
+      <div class="d-flex align-items-center gap-3">
+        <div class="text-end d-none d-lg-block">
+          <div class="small fw-bold text-dark">{{ authService.getCurrentUser()?.nombreCompleto }}</div>
+          <div class="small text-muted">Consultor de Marketing</div>
+        </div>
+        <button (click)="logout()" class="btn btn-outline-danger btn-sm rounded-pill px-3 shadow-sm transition-all">
+          <i class="bi bi-box-arrow-right me-1"></i> Salir
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container py-5 animate__animated animate__fadeIn">
+    
+    <!-- Hero Section -->
+    <div class="row mb-5 align-items-center">
+      <div class="col-lg-8">
+        <h1 class="display-4 fw-black text-ciber-blue mb-2">Escenarios Estratégicos</h1>
+        <p class="lead text-muted">Selecciona un reto empresarial para poner a prueba tus capacidades analíticas y de toma de decisiones.</p>
+      </div>
+      <div class="col-lg-4 text-lg-end d-none d-lg-block">
+        <div class="badge bg-white shadow-sm border rounded-pill px-4 py-3 text-dark">
+          <i class="bi bi-calendar-check me-2 text-primary"></i> {{ dateNow | date:'dd MMMM, yyyy' }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Rejilla de Escenarios -->
+    <div class="row g-4">
+      @for (esc of escenarios(); track esc.id) {
+        <div class="col-lg-6">
+          <div class="card scenario-card h-100 border-0 shadow-lg rounded-5 overflow-hidden transition-all bg-white">
+            <div class="position-relative">
+              <img [src]="esc.imagenUrl || 'assets/scenarios/placeholder.png'" 
+                   [alt]="esc.titulo" 
+                   class="card-img-top" 
+                   style="height: 280px; object-fit: cover;">
+              <div class="card-img-overlay d-flex align-items-top justify-content-end p-3">
+                @if (esc.estadoSim === 'FINALIZADO') {
+                  <span class="badge bg-success shadow-lg rounded-pill px-3 py-2 animate__animated animate__pulse"><i class="bi bi-check-circle-fill me-1"></i> Completado</span>
+                } @else if (esc.estadoSim === 'EN_PROGRESO') {
+                  <span class="badge bg-warning text-dark shadow-lg rounded-pill px-3 py-2 animate__animated animate__pulse animate__infinite"><i class="bi bi-play-circle-fill me-1"></i> En Curso</span>
+                }
+              </div>
+            </div>
+            
+            <div class="card-body p-4 p-xl-5">
+              <div class="d-flex justify-content-between align-items-start mb-3">
+                <h3 class="fw-bold text-ciber-blue mb-0" style="font-size: 1.75rem;">{{ esc.titulo }}</h3>
+              </div>
+              <p class="text-muted mb-4 line-clamp-3" style="font-size: 1rem; line-height: 1.6;">{{ esc.descripcionEmpresa }}</p>
+              
+              <div class="d-flex align-items-center justify-content-between gap-4 mt-auto pt-3 border-top">
+                <div class="small fw-bold text-uppercase tracking-wider text-muted">
+                   <i class="bi bi-list-check me-1"></i> 8 Decisiones
+                </div>
+                <button (click)="startSimulation(esc)" 
+                        [class]="esc.estadoSim === 'NUEVO' ? 'btn btn-ciber-blue btn-lg rounded-pill px-5 shadow' : 'btn btn-outline-primary btn-lg rounded-pill px-5'"
+                        class="fw-bold transition-all">
+                  @if (esc.estadoSim === 'NUEVO') {
+                    Iniciar <i class="bi bi-rocket-takeoff ms-2"></i>
+                  } @else if (esc.estadoSim === 'EN_PROGRESO') {
+                    Continuar <i class="bi bi-arrow-repeat ms-2"></i>
+                  } @else {
+                    Reporte <i class="bi bi-eye ms-2"></i>
+                  }
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      } @empty {
+        <div class="col-12 text-center py-5">
+          <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status"></div>
+          <h4 class="mt-4 text-ciber-blue tracking-widest fw-bold">SINCRONIZANDO LABORATORIO</h4>
+          <p class="text-muted">Preparando el entorno estratégico institucional...</p>
+        </div>
+      }
+    </div>
+  </div>
+</div>
+
+<style>
+  :root { --ciber-blue: #002855; }
+  .fw-black { font-weight: 900; }
+  .text-ciber-blue { color: var(--ciber-blue); }
+  .btn-ciber-blue { background-color: var(--ciber-blue); color: white; border: none; }
+  .btn-ciber-blue:hover { background-color: #001a38; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,40,85,0.3) !important; }
+  .scenario-card { transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); }
+  .scenario-card:hover { transform: translateY(-10px); box-shadow: 0 30px 60px rgba(0,0,0,0.12) !important; }
+  .bg-soft-primary { background-color: #eef4ff; }
+  .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .transition-all { transition: all 0.2s ease-in-out; }
+  .tracking-wider { letter-spacing: 0.05em; }
+</style>

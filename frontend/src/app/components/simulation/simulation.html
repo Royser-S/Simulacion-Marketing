@@ -1,0 +1,217 @@
+<div class="simulation-layout min-vh-100 bg-light">
+  <!-- Barra Superior Institucional -->
+  <header class="bg-white shadow-sm sticky-top py-3 mb-4 px-4 border-bottom border-primary border-3 border-top-0 border-start-0 border-end-0">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center gap-3">
+        <img src="assets/cibertec-logo.png" alt="Cibertec Logo" style="height: 35px;">
+        <div class="vr mx-2 text-muted opacity-25"></div>
+        <div>
+          <h5 class="mb-0 fw-bold text-ciber-blue">CiberMarketing Lab</h5>
+          <small class="text-muted">Laboratorio Estratégico @if (isReadOnly()) { | <span class="badge bg-secondary-soft text-secondary px-2">Modo Revisión</span> }</small>
+        </div>
+      </div>
+
+      <div class="d-flex align-items-center gap-4">
+        <div class="progress-box d-none d-md-block text-end">
+          <div class="small fw-bold text-muted mb-1">Ruta de Consultoría</div>
+          <div class="d-flex align-items-center gap-2">
+            @for (i of [1,2,3,4,5,6,7,8]; track i) {
+              <div class="progress-dot" [class.done]="completedBranches().length >= i" [class.current]="completedBranches().length + 1 === i"></div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container pb-5">
+    @if (preguntas().length > 0) {
+
+      <!-- MODOS DE SIMULACIÓN Y NAVEGACIÓN (TARJETA ÚNICA) -->
+      @if (viewMode() === 'SIMULATION') {
+        <div class="row justify-content-center animate__animated animate__fadeInUp">
+          <div class="col-lg-8">
+            <div class="card premium-card overflow-hidden shadow-lg border-0 rounded-5">
+              
+              <!-- Encabezado de la Tarjeta (Contexto Dinámico) -->
+              <div class="p-4 bg-ciber-blue text-white d-flex justify-content-between align-items-center">
+                <span class="badge bg-white text-primary rounded-pill px-3">Fase {{ displayState().question?.fase }}</span>
+                <h6 class="mb-0 opacity-75 fw-normal">{{ displayState().isNav ? 'Próximo Paso' : ('Investigando: ' + currentBranch()) }}</h6>
+                <div class="puntaje-badget bg-opacity-25 bg-white rounded-pill px-3 py-1 small">
+                  Score: {{ puntajeAcumulado() }}
+                </div>
+              </div>
+
+              <div class="card-body p-5">
+                <!-- Enunciado -->
+                <h3 class="text-dark mb-5 lh-base fw-bold">
+                  {{ displayState().question?.enunciado }}
+                </h3>
+
+                <!-- Opciones -->
+                <div class="options-grid">
+                  @for (opcion of displayState().question?.opciones; track opcion.id) {
+                    <button (click)="submitAnswer(displayState().isNav ? opcion : opcion.id)" 
+                            class="btn option-btn p-4 mb-3 text-start w-100 border-2 rounded-4 d-flex justify-content-between align-items-center transition-all"
+                            [class.nav-btn]="displayState().isNav"
+                            [disabled]="cargandoRespuesta() || isReadOnly()">
+                      
+                      <div class="d-flex align-items-center gap-3">
+                        @if (displayState().isNav) {
+                          <div class="icon-circle bg-soft-primary text-primary">
+                            <i class="bi bi-compass"></i>
+                          </div>
+                        }
+                        <span class="h5 mb-0 fw-semibold">{{ opcion.textoOpcion }}</span>
+                      </div>
+
+                      <i class="bi bi-chevron-right opacity-50"></i>
+                    </button>
+                  }
+                </div>
+              </div>
+
+              <!-- Footer de la Tarjeta -->
+              <div class="card-footer bg-light border-0 p-3 text-center">
+                <small class="text-muted"><i class="bi bi-info-circle me-1"></i> Pulsa sobre la opción que consideres más estratégica para avanzar.</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- MODO HALLAZGOS (RESULTADOS DE LA RAMA) -->
+      @if (viewMode() === 'RESULT_FINDING') {
+        <div class="row justify-content-center animate__animated animate__zoomIn">
+          <div class="col-lg-8">
+            <div class="card border-0 shadow-lg rounded-5 overflow-hidden">
+              <div class="p-5 text-center bg-white">
+                <div class="display-1 text-success mb-4 animate__animated animate__bounceIn">
+                  <i class="bi bi-search"></i>
+                </div>
+                <h2 class="fw-bold text-ciber-blue mb-3">Hallazgos de la Investigación</h2>
+                <div class="p-4 bg-soft-success rounded-4 border border-success border-opacity-25 mb-4 text-start">
+                  <p class="lead mb-0 text-dark italic">"{{ findingActual() }}"</p>
+                </div>
+                <button (click)="nextPhase()" class="btn btn-ciber-blue btn-lg rounded-pill px-5 py-3 fw-bold shadow">
+                  Continuar Consultoría <i class="bi bi-arrow-right ms-2"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- MODO RESULTADO FINAL -->
+      @if (viewMode() === 'FINAL_RESULT') {
+        <div class="container animate__animated animate__fadeInUp pb-5 mt-4">
+          <div class="d-flex justify-content-center gap-3 mb-4 no-print text-center flex-column align-items-center">
+             <h1 class="display-4 fw-bold text-ciber-blue mb-2">Simulación Completada</h1>
+             <p class="text-muted mb-4">Has generado el reporte estratégico para MarketMind</p>
+             <div class="d-flex gap-2">
+               <button (click)="downloadCertificate()" class="btn btn-ciber-blue rounded-pill px-4 shadow">Descargar Respuesta Empresa</button>
+               <button (click)="printReport()" class="btn btn-outline-dark rounded-pill px-4">Imprimir Resultados</button>
+             </div>
+          </div>
+
+          <div class="row g-4 justify-content-center">
+            <div class="col-lg-7">
+              <div id="certificate-card" class="card shadow border-0 overflow-hidden rounded-5">
+                <div class="bg-ciber-blue p-5 text-white text-center position-relative">
+                  <img src="assets/cibertec-logo-white.png" class="position-absolute top-0 start-0 m-4 opacity-25" style="height: 30px;">
+                  <h2 class="fw-bold mb-1">{{ authService.getCurrentUser()?.nombreCompleto }}</h2>
+                  <p class="text-info text-uppercase fw-bold small mb-0">Consultor Senior de Marketing</p>
+                </div>
+                <div class="card-body p-5 bg-white">
+                  <h4 class="fw-bold text-dark border-bottom pb-3 mb-4">Carta de Respuesta Institucional</h4>
+                  <p class="text-muted">Estimado Consultor,</p>
+                  <p class="fs-5 lh-base text-dark">{{ resultado()?.mensajeFinal }}</p>
+                  <div class="alert alert-soft-primary p-4 rounded-4 text-center my-4 border-0">
+                    <small class="text-uppercase text-muted d-block mb-1">Puntaje Basado en Blueprint</small>
+                    <div class="display-3 fw-black text-primary">{{ resultado()?.puntajeTotal }}<small class="fs-4 text-muted">/20.0</small></div>
+                  </div>
+                  <div class="border-top pt-4 d-flex justify-content-between align-items-center">
+                    <div class="signature">
+                      <div class="text-dark fw-bold">Gerencia de MarketMind</div>
+                      <small class="text-muted">ID Simulación: #{{ simulacionId() }}</small>
+                    </div>
+                    <div class="stamp border border-3 border-primary text-primary px-3 py-1 fw-bold rounded-3 rotate-n-15 d-inline-block">APROBADO</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+    } @else {
+      <div class="text-center py-5">
+        <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status"></div>
+        <h4 class="mt-4 text-ciber-blue tracking-widest fw-bold">CARGANDO LABORATORIO</h4>
+        <p class="text-muted">Preparando el entorno estratégico...</p>
+      </div>
+    }
+  </main>
+</div>
+
+<!-- OVERLAY DE FEEDBACK TÁCTICO -->
+@if (feedbackActual()) {
+  <div class="feedback-overlay d-flex align-items-center justify-content-center animate__animated animate__fadeIn">
+    <div class="card feedback-card border-0 shadow-lg p-5 text-center rounded-5 mx-3 animate__animated animate__jackInTheBox" style="max-width: 500px;">
+      <div class="feedback-icon mb-4">
+        @if (feedbackActual().puntosObtenidos >= 2) {
+          <i class="bi bi-star-fill text-warning display-1"></i>
+        } @else {
+          <i class="bi bi-check-circle-fill text-success display-1"></i>
+        }
+      </div>
+      <h3 class="fw-bold mb-4 text-ciber-blue">Análisis del Movimiento</h3>
+      <div class="feedback-badge bg-primary text-white rounded-pill px-3 py-1 mb-4 d-inline-block">
+        +{{ feedbackActual().puntosObtenidos }} puntos obtenidos
+      </div>
+      <p class="p-4 bg-light rounded-4 border-0 fs-5 mb-4 text-dark shadow-inner">"{{ feedbackActual().feedback }}"</p>
+      <button class="btn btn-ciber-blue btn-lg w-100 rounded-pill py-3 fw-bold mt-2 shadow" (click)="showFindings()">
+        Ver Hallazgos Estratégicos <i class="bi bi-search ms-2"></i>
+      </button>
+    </div>
+  </div>
+}
+
+<style>
+  :root { --ciber-blue: #002855; }
+  .text-ciber-blue { color: var(--ciber-blue); }
+  .bg-ciber-blue { background-color: var(--ciber-blue); }
+  .btn-ciber-blue { background-color: var(--ciber-blue); color: white; }
+  .btn-ciber-blue:hover { background-color: #001a38; color: white; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,40,85,0.3); }
+  
+  .progress-dot { width: 12px; height: 12px; border-radius: 50%; background: #e0e0e0; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+  .progress-dot.done { background: var(--ciber-blue); transform: scale(1.1); }
+  .progress-dot.current { background: #3498db; animation: p-pulse 2s infinite; }
+  
+  .feedback-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 40, 85, 0.7);
+    backdrop-filter: blur(8px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .feedback-card {
+    max-width: 500px;
+    width: 90%;
+    background: white;
+    border-radius: 30px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  }
+
+  .bg-soft-success { background-color: rgba(40, 167, 69, 0.1); }
+  .bg-secondary-soft { background-color: rgba(108, 117, 125, 0.1); }
+  
+  @media print { .no-print { display: none !important; } .container { width: 100%; max-width: 100%; padding: 0; } body { background: white; } }
+</style>
