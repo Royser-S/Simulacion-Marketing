@@ -16,7 +16,8 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- 1. ROLES Y USUARIOS BASE
 INSERT INTO roles (id, nombre) VALUES (1, 'ADMIN'), (2, 'ESTUDIANTE'), (3, 'DOCENTE');
 INSERT INTO usuarios (id, nombre_completo, correo, password, rol_id) 
-VALUES (1, 'Admin Cibertec', 'admin@cibertec.edu.pe', '$2a$10$8.UnVuG9HHgffUDAlk8Kn.2NvEfW.rS3v5u70.S.N8fLw1S6v.O.', 1);
+VALUES (1, 'Admin Cibertec', 'admin@cibertec.edu.pe', '$2a$10$vr3IYR2F3iikVKRMdqMhVuIZBgrK0C4PplX6zixDG15nBB1XhFQXS', 1),
+       (2, 'Estudiante Prueba', 'estudiante@cibertec.edu.pe', '$2a$10$vr3IYR2F3iikVKRMdqMhVuIZBgrK0C4PplX6zixDG15nBB1XhFQXS', 2);
 
 -- 2. ESCENARIOS
 INSERT INTO escenarios (id, titulo, descripcion_empresa, descripcion_producto, situacion_mercado, imagen_url) VALUES 
