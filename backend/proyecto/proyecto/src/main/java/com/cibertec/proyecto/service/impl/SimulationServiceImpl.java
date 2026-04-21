@@ -200,7 +200,7 @@ public class SimulationServiceImpl implements SimulationService {
 
         return SimulationResultResponse.builder()
                 .puntajeTotal(puntaje)
-                .escenarioId(sim.getEscenario() != null ? sim.getEscenario().getId() : 1L)
+                .escenarioId(simulacion.getEscenario() != null ? simulacion.getEscenario().getId() : 1L)
                 .rango(rango)
                 .mensajeFinal(mensaje)
                 .decisiones(detalles)
