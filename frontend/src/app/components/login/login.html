@@ -1,22 +1,57 @@
-<div class="row justify-content-center">
-  <div class="col-md-5">
-    <div class="card premium-card p-4 mt-5">
-      <div class="card-body">
-        <h2 class="text-center mb-4"><i class="bi bi-shield-lock text-primary"></i> Ingreso al Simulador</h2>
+<div class="login-container">
+  <div class="login-card">
+    <div class="row g-0">
+      <!-- Left Side: Hero/Branding -->
+      <div class="col-lg-6 login-hero d-none d-lg-flex">
+        <div class="mb-5">
+          <img src="assets/cibertec-logo.png" alt="Cibertec" style="height: 50px; filter: brightness(0) invert(1);">
+        </div>
+        <h1 class="welcome-title mb-4">Potencia tu visión de Marketing Estratégico</h1>
+        <p class="lead opacity-75 mb-5">Bienvenido al Simulador Corporativo. Analiza datos, toma decisiones críticas y lidera el mercado en tiempo real.</p>
+        <div class="mt-auto">
+          <div class="d-flex align-items-center gap-3">
+            <div class="badge bg-white text-primary rounded-pill px-3 py-2 fw-bold">v2.1 Lab</div>
+            <div class="small opacity-50">© 2026 Cibertec Marketing Lab</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Side: Login Form -->
+      <div class="col-lg-6 login-form-side bg-white">
+        <div class="mb-5 text-center text-lg-start">
+          <h2 class="fw-bold text-dark mb-1">Iniciar Sesión</h2>
+          <p class="text-muted">Ingresa tus credenciales institucionales</p>
+        </div>
+
         <form (ngSubmit)="onLogin()">
-          <div class="mb-3">
-            <label class="form-label">Correo Institucional</label>
-            <input type="email" class="form-control" [(ngModel)]="credentials.correo" name="correo" placeholder="@cibertec.edu.pe" required>
+          <div class="mb-4">
+            <label class="form-label fw-bold small text-muted text-uppercase">Correo Institucional</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light border-0"><i class="bi bi-envelope text-muted"></i></span>
+              <input type="email" class="form-control" [(ngModel)]="credentials.correo" name="correo" placeholder="usuario@cibertec.edu.pe" required>
+            </div>
           </div>
-          <div class="mb-3">
-            <label class="form-label">Contraseña</label>
-            <input type="password" class="form-control" [(ngModel)]="credentials.password" name="password" required>
+
+          <div class="mb-5">
+            <label class="form-label fw-bold small text-muted text-uppercase">Contraseña</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light border-0"><i class="bi bi-lock text-muted"></i></span>
+              <input type="password" class="form-control" [(ngModel)]="credentials.password" name="password" placeholder="••••••••" required>
+            </div>
+            <div class="text-end mt-2">
+              <a href="#" class="small text-decoration-none text-muted">¿Olvidaste tu contraseña?</a>
+            </div>
           </div>
-          <button type="submit" class="btn btn-primary w-100 mb-3" [disabled]="loading">
+
+          <button type="submit" class="btn btn-primary w-100 mb-4 py-3 shadow-lg" [disabled]="loading">
             <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
-            Entrar
+            Acceder al Simulador <i class="bi bi-chevron-right ms-2"></i>
           </button>
-          <p class="text-center">¿No tienes cuenta? <a routerLink="/register">Regístrate aquí</a></p>
+
+          <div class="text-center mt-4">
+            <span class="text-muted small">¿Eres nuevo en el laboratorio?</span>
+            <a routerLink="/register" class="fw-bold text-decoration-none ms-2">Solicitar cuenta</a>
+          </div>
         </form>
       </div>
     </div>

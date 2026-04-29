@@ -79,7 +79,21 @@ public class AdminServiceImpl implements AdminService {
         usuario.setCorreo(request.getCorreo());
         usuario.setPassword(passwordEncoder.encode(request.getPassword()));
         usuario.setRol(rol);
+        usuario.setActivo(true);
 
+        return usuarioRepository.save(usuario);
+    }
+
+    @Override
+    public List<Usuario> listarUsuarios() {
+        return usuarioRepository.findAll();
+    }
+
+    @Override
+    public Usuario toggleEstadoUsuario(Long id) {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        usuario.setActivo(!usuario.isActivo());
         return usuarioRepository.save(usuario);
     }
 }

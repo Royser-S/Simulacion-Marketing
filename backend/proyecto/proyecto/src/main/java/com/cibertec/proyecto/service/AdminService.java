@@ -18,4 +18,6 @@ public interface AdminService {
     List<Escenario> listarTodosEscenarios();
     void eliminarEscenario(Long id);
     Usuario registrarUsuario(RegisterRequest request);
+    List<Usuario> listarUsuarios();
+    Usuario toggleEstadoUsuario(Long id);
 }

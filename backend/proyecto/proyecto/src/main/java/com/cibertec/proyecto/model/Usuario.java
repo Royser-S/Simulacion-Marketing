@@ -27,4 +27,7 @@ public class Usuario {
     @ManyToOne
     @JoinColumn(name = "rol_id")
     private Role rol;
+
+    @Column(nullable = false)
+    private boolean activo = true;
 }

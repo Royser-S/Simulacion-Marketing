@@ -1,0 +1,178 @@
+<div class="editor-layout min-vh-100 bg-light">
+  <!-- Navbar Editor -->
+  <nav class="navbar bg-white border-bottom shadow-sm px-4 py-3 sticky-top">
+    <div class="container-fluid">
+      <div class="d-flex align-items-center gap-3">
+        <button (click)="goBack()" class="btn btn-icon rounded-circle bg-light">
+          <i class="bi bi-chevron-left"></i>
+        </button>
+        <div>
+          <h5 class="mb-0 fw-bold text-dark">Gestión de Laboratorios</h5>
+          <small class="text-muted">Editor de Escenarios y Preguntas</small>
+        </div>
+      </div>
+      
+      @if (view() === 'LIST') {
+        <button (click)="showCreateScenario()" class="btn btn-primary rounded-pill px-4 fw-bold">
+          <i class="bi bi-plus-lg me-2"></i> Nuevo Escenario
+        </button>
+      }
+    </div>
+  </nav>
+
+  <main class="container py-5">
+    
+    <!-- VISTA: LISTADO DE ESCENARIOS -->
+    @if (view() === 'LIST') {
+      <div class="row g-4 animate__animated animate__fadeIn">
+        @for (esc of escenarios(); track esc.id) {
+          <div class="col-md-6 col-lg-4">
+            <div class="card-scenario bg-white rounded-5 shadow-sm border-0 overflow-hidden h-100 d-flex flex-column">
+              <div class="p-4 flex-grow-1">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                  <div class="icon-box bg-primary-soft text-primary"><i class="bi bi-folder2-open"></i></div>
+                  <button (click)="deleteScenario(esc.id, $event)" class="btn btn-sm btn-outline-danger border-0 rounded-circle">
+                    <i class="bi bi-trash3"></i>
+                  </button>
+                </div>
+                <h5 class="fw-bold text-dark mb-2">{{ esc.titulo }}</h5>
+                <p class="text-muted small mb-0">{{ esc.descripcionEmpresa | slice:0:100 }}...</p>
+              </div>
+              <div class="p-3 bg-light border-top text-center">
+                <button (click)="editQuestions(esc.id)" class="btn btn-link text-primary fw-bold text-decoration-none">
+                  Gestionar Preguntas <i class="bi bi-arrow-right ms-1"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        } @empty {
+          <div class="col-12 text-center py-5">
+            <i class="bi bi-clipboard-x display-1 text-muted opacity-25"></i>
+            <h4 class="mt-4 text-muted">No hay escenarios creados</h4>
+            <p>Comienza creando el primer laboratorio para tus alumnos.</p>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- VISTA: CREAR ESCENARIO -->
+    @if (view() === 'CREATE_SCENARIO') {
+      <div class="row justify-content-center animate__animated animate__fadeInUp">
+        <div class="col-lg-8">
+          <div class="card border-0 shadow-lg rounded-5 overflow-hidden">
+            <div class="bg-primary p-4 text-white">
+              <h4 class="mb-0 fw-bold">Paso 1: Configurar Escenario</h4>
+              <p class="mb-0 opacity-75 small">Define el contexto empresarial del reto.</p>
+            </div>
+            <div class="card-body p-4 p-md-5">
+              <div class="row g-4">
+                <div class="col-12">
+                  <label class="form-label fw-bold small text-muted text-uppercase">Título del Laboratorio</label>
+                  <input type="text" [(ngModel)]="scenarioForm.titulo" class="form-control rounded-4 py-3" placeholder="Ej: MarketMind: El Reto de la IA">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-bold small text-muted text-uppercase">La Empresa</label>
+                  <textarea [(ngModel)]="scenarioForm.descripcionEmpresa" rows="3" class="form-control rounded-4" placeholder="¿A qué se dedica la empresa?"></textarea>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-bold small text-muted text-uppercase">El Producto</label>
+                  <textarea [(ngModel)]="scenarioForm.descripcionProducto" rows="3" class="form-control rounded-4" placeholder="¿Qué vende o qué soluciona?"></textarea>
+                </div>
+                <div class="col-12">
+                  <label class="form-label fw-bold small text-muted text-uppercase">Situación del Mercado</label>
+                  <textarea [(ngModel)]="scenarioForm.situacionMercado" rows="3" class="form-control rounded-4" placeholder="¿Cuál es el problema actual?"></textarea>
+                </div>
+              </div>
+              <div class="text-end mt-5">
+                <button (click)="saveScenario()" [disabled]="loading()" class="btn btn-primary rounded-pill px-5 py-3 fw-bold">
+                  Siguiente: Añadir Preguntas <i class="bi bi-arrow-right ms-2"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- VISTA: EDITAR PREGUNTAS -->
+    @if (view() === 'EDIT_QUESTIONS') {
+      <div class="row justify-content-center animate__animated animate__fadeInUp">
+        <div class="col-lg-10">
+          <div class="card border-0 shadow-lg rounded-5 overflow-hidden mb-5">
+            <div class="bg-success p-4 text-white d-flex justify-content-between align-items-center">
+              <div>
+                <h4 class="mb-0 fw-bold">Paso 2: Banco de Decisiones</h4>
+                <p class="mb-0 opacity-75 small">Añade las preguntas de forma secuencial (Fases 1 a 8).</p>
+              </div>
+              <i class="bi bi-layers fs-1 opacity-25"></i>
+            </div>
+            <div class="card-body p-4 p-md-5">
+              <div class="row g-4">
+                <div class="col-md-8">
+                  <label class="form-label fw-bold small text-muted text-uppercase">Enunciado del Reto</label>
+                  <input type="text" [(ngModel)]="questionForm.enunciado" class="form-control rounded-4 py-3" placeholder="¿Qué decisión debe tomar el alumno?">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label fw-bold small text-muted text-uppercase">Fase (1-8)</label>
+                  <input type="number" [(ngModel)]="questionForm.fase" class="form-control rounded-4 py-3">
+                </div>
+
+                <div class="col-12 mt-4">
+                  <h6 class="fw-bold text-dark border-bottom pb-2 mb-3">Opciones de Respuesta</h6>
+                  @for (opt of questionForm.options; track $index) {
+                    <div class="bg-light p-4 rounded-4 mb-3 border">
+                      <div class="row g-3">
+                        <div class="col-md-6">
+                          <label class="form-label small fw-bold">Texto de la Opción</label>
+                          <input type="text" [(ngModel)]="opt.textoOpcion" class="form-control rounded-3" placeholder="Ej: Implementar Test A/B">
+                        </div>
+                        <div class="col-md-4">
+                          <label class="form-label small fw-bold">Puntaje (0 - 3)</label>
+                          <input type="number" [(ngModel)]="opt.puntos" class="form-control rounded-3">
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end justify-content-center">
+                          <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" [(ngModel)]="opt.esMejorOpcion">
+                            <label class="form-check-label small fw-bold">¿Mejor?</label>
+                          </div>
+                        </div>
+                        <div class="col-12">
+                          <label class="form-label small fw-bold">Feedback / Justificación</label>
+                          <input type="text" [(ngModel)]="opt.feedback" class="form-control rounded-3" placeholder="Explica por qué esta respuesta es buena o mala...">
+                        </div>
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+              
+              <div class="d-flex justify-content-between mt-5">
+                <button (click)="view.set('LIST')" class="btn btn-outline-secondary rounded-pill px-4 py-2">
+                  <i class="bi bi-check-lg me-2"></i> Guardar y Salir
+                </button>
+                <button (click)="addQuestion()" [disabled]="loading()" class="btn btn-success rounded-pill px-5 py-3 fw-bold shadow">
+                  <i class="bi bi-plus-circle me-2"></i> Añadir esta Pregunta
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+  </main>
+</div>
+
+<style>
+  .card-scenario { transition: 0.3s; border: 1px solid transparent !important; }
+  .card-scenario:hover { transform: translateY(-8px); border-color: #002855 !important; box-shadow: 0 15px 35px rgba(0,0,0,0.1) !important; }
+  
+  .icon-box { width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+  .bg-primary-soft { background-color: rgba(0, 40, 85, 0.1); }
+  
+  .btn-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border: none; }
+  .btn-icon:hover { background-color: #e2e8f0 !important; }
+
+  .bg-primary { background-color: #002855 !important; }
+  .form-control:focus, .form-select:focus { border-color: #002855; box-shadow: 0 0 0 0.25rem rgba(0, 40, 85, 0.1); }
+</style>
