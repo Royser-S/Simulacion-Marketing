@@ -1,0 +1,41 @@
+.text-ciber-blue { color: #002855; }
+.bg-ciber-blue { background-color: #002855; }
+.fw-black { font-weight: 900; }
+
+.icon-box {
+  width: 50px;
+  height: 50px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.bg-primary-soft { background-color: #eef4ff; }
+.bg-success-soft { background-color: #e8f5e9; }
+.bg-warning-soft { background-color: #fff8e1; }
+
+.stat-card {
+  transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+}
+
+.table thead th {
+  border-top: none;
+  border-bottom: 2px solid #f1f5f9;
+  padding-bottom: 1rem;
+}
+
+.table tbody td {
+  padding: 1.5rem 0.75rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+@media print {
+  .btn-light, .icon-box, hr { display: none; }
+  .card { box-shadow: none !important; border: 1px solid #ddd !important; }
+}

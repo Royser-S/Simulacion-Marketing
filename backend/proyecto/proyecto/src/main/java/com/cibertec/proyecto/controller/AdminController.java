@@ -46,4 +46,14 @@ public class AdminController {
     public ResponseEntity<Usuario> registrarUsuario(@RequestBody RegisterRequest request) {
         return ResponseEntity.ok(adminService.registrarUsuario(request));
     }
+
+    @GetMapping("/usuarios")
+    public ResponseEntity<List<Usuario>> listarUsuarios() {
+        return ResponseEntity.ok(adminService.listarUsuarios());
+    }
+
+    @PostMapping("/usuarios/{id}/toggle")
+    public ResponseEntity<Usuario> toggleUsuario(@PathVariable Long id) {
+        return ResponseEntity.ok(adminService.toggleEstadoUsuario(id));
+    }
 }

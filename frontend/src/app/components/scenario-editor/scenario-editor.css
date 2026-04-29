@@ -1,0 +1,33 @@
+.text-ciber-blue { color: #002855; }
+.bg-ciber-blue { background-color: #002855; }
+.btn-ciber-blue { background-color: #002855; color: white; }
+.btn-ciber-blue:hover { background-color: #001a38; transform: translateY(-2px); }
+
+.step-indicator {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  border: 2px solid #002855;
+  transition: all 0.3s ease;
+}
+
+.option-box {
+  transition: border-color 0.3s ease;
+}
+
+.option-box:focus-within {
+  border-color: #002855 !important;
+}
+
+.bg-soft-primary {
+  background-color: #eef4ff;
+}
+
+.hover-lift:hover {
+  transform: translateY(-5px);
+  transition: transform 0.3s ease;
+}

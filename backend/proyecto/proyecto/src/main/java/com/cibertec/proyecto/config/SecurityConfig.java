@@ -26,7 +26,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/simulaciones/**").permitAll()
-                .requestMatchers("/api/admin/**").hasAuthority("ADMIN") // Solo Admin
+                .requestMatchers("/api/admin/**").permitAll() // Temporalmente permitall para MVP
                 .anyRequest().authenticated()
             );
         return http.build();

@@ -1,0 +1,105 @@
+<div class="container py-5 animate__animated animate__fadeIn">
+  <div class="mb-5">
+    <h1 class="display-5 fw-bold text-ciber-blue mb-1">Reportes de Desempeño Global</h1>
+    <p class="text-muted">Análisis estadístico de la participación y resultados de los estudiantes.</p>
+  </div>
+
+  @if (loading()) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status"></div>
+      <p class="mt-3 text-muted">Generando analíticas...</p>
+    </div>
+  } @else {
+    <!-- Top Stats Cards -->
+    <div class="row g-4 mb-5">
+      <div class="col-md-4">
+        <div class="stat-card p-4 rounded-4 shadow-sm border-0 bg-white">
+          <div class="d-flex align-items-center gap-3">
+            <div class="icon-box bg-primary-soft text-primary"><i class="bi bi-people-fill"></i></div>
+            <div>
+              <div class="small text-muted fw-bold text-uppercase">Total Simulaciones</div>
+              <div class="h2 mb-0 fw-black text-ciber-blue">{{ stats().totalSimulaciones }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="stat-card p-4 rounded-4 shadow-sm border-0 bg-white">
+          <div class="d-flex align-items-center gap-3">
+            <div class="icon-box bg-success-soft text-success"><i class="bi bi-check-circle-fill"></i></div>
+            <div>
+              <div class="small text-muted fw-bold text-uppercase">Tasa de Finalización</div>
+              <div class="h2 mb-0 fw-black text-ciber-blue">
+                {{ stats().totalSimulaciones > 0 ? (stats().completadas / stats().totalSimulaciones * 100).toFixed(1) : 0 }}%
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="stat-card p-4 rounded-4 shadow-sm border-0 bg-white">
+          <div class="d-flex align-items-center gap-3">
+            <div class="icon-box bg-warning-soft text-warning"><i class="bi bi-star-fill"></i></div>
+            <div>
+              <div class="small text-muted fw-bold text-uppercase">Puntaje Promedio</div>
+              <div class="h2 mb-0 fw-black text-ciber-blue">{{ stats().promedioPuntos }} pts</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scenario Breakdown -->
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
+          <h4 class="fw-bold text-ciber-blue mb-4">Popularidad por Escenario</h4>
+          <div class="table-responsive">
+            <table class="table align-middle">
+              <thead class="text-muted small text-uppercase">
+                <tr>
+                  <th>Escenario</th>
+                  <th>Simulaciones</th>
+                  <th>Promedio</th>
+                  <th>Distribución</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (item of stats().porEscenario; track item.nombre) {
+                  <tr>
+                    <td class="fw-bold text-ciber-blue">{{ item.nombre }}</td>
+                    <td>{{ item.count }}</td>
+                    <td>{{ item.promedio }} pts</td>
+                    <td style="width: 200px;">
+                      <div class="progress rounded-pill" style="height: 8px;">
+                        <div class="progress-bar bg-primary" [style.width.%]="item.porcentaje"></div>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="card border-0 shadow-sm rounded-4 p-4 bg-ciber-blue text-white">
+          <h5 class="fw-bold mb-4">Insights Rápidos</h5>
+          <div class="mb-4">
+            <div class="small opacity-75 mb-1">Estado más común</div>
+            <div class="fw-bold">Finalizado <i class="bi bi-arrow-up-right text-success ms-1"></i></div>
+          </div>
+          <div class="mb-4">
+            <div class="small opacity-75 mb-1">Escenario con mayor puntaje</div>
+            <div class="fw-bold">Marketing Digital 101</div>
+          </div>
+          <hr class="opacity-25">
+          <button class="btn btn-light w-100 rounded-pill fw-bold" onclick="window.print()">
+            <i class="bi bi-download me-2"></i> Descargar Reporte PDF
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

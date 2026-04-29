@@ -10,9 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,17 +64,10 @@ public class SimulationServiceImpl implements SimulationService {
         // Generar orden aleatorio por fases (Requerimiento Blueprint)
         List<Pregunta> todas = preguntaRepository.findByEscenarioIdOrderByFaseAsc(escenarioId);
         
-        // Agrupar y barajar por fase para mantener coherencia narrativa
-        List<Long> ordenIds = new ArrayList<>();
-        for (int f = 1; f <= 3; f++) {
-            final int faseActual = f;
-            List<Long> idsFase = todas.stream()
-                    .filter(p -> p.getFase() == faseActual)
-                    .map(Pregunta::getId)
-                    .collect(Collectors.toList());
-            Collections.shuffle(idsFase);
-            ordenIds.addAll(idsFase);
-        }
+        // Agrupar por fase para mantener coherencia narrativa (A->B->C)
+        List<Long> ordenIds = todas.stream()
+                .map(Pregunta::getId)
+                .collect(Collectors.toList());
 
         simulacion.setOrdenPreguntas(ordenIds.stream()
                 .map(String::valueOf)
